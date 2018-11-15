@@ -12,7 +12,7 @@ class SentinelDatabaseSeeder extends Seeder
     public function run()
     {
         // Create Users
-        DB::table('users')->truncate();
+        //DB::table('users')->truncate();
 
         $admin = Sentinel::getUserRepository()->create(array(
             'email'    => 'admin@admin.com',

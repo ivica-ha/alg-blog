@@ -58,19 +58,30 @@ class RegistrationController extends Controller
         ];
 
         // Attempt the registration
-        $result = $this->authManager->register($credentials);
+        $result = $this->authManager->register($credentials, true);
 
         if ($result->isFailure()) {
             return $result->dispatch();
         }
 
+        $activation = true;
+
         // Send the activation email
-        $code = $result->activation->getCode();
-        $email = $result->user->email;
-        Mail::to($email)->queue(new CentaurWelcomeEmail($email, $code, 'Your account has been created!'));
+        if(!$activation){
+          $code = $result->activation->getCode();
+          $email = $result->user->email;
+          Mail::to($email)->queue(new CentaurWelcomeEmail($email, $code, 'Your account has been created!'));
+          $message = 'Registration complete.  Please check your email for activation instructions.';
+      } else {
+          $role = Sentinel::findRoleBySlug('subscriber');
+          if($role){
+            $role->users()->attach($result->user);
+          }
+          $message = 'Registration complete.';
+      }
 
         // Ask the user to check their email for the activation link
-        $result->setMessage('Registration complete.  Please check your email for activation instructions.');
+        $result->setMessage($message);
 
         // There is no need to send the payload data to the end user
         $result->clearPayload();

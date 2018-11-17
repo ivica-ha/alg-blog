@@ -56,9 +56,15 @@ class RegistrationController extends Controller
             'email' => trim($request->get('email')),
             'password' => $request->get('password'),
         ];
+				
+				$activation = true;
 
         // Attempt the registration
+<<<<<<< HEAD
         $result = $this->authManager->register($credentials, true);
+=======
+        $result = $this->authManager->register($credentials, $activation);
+>>>>>>> f508a5b5c9b58678fecb8cbee2e327f2d07e0d05
 
         if ($result->isFailure()) {
             return $result->dispatch();
@@ -67,6 +73,7 @@ class RegistrationController extends Controller
         $activation = true;
 
         // Send the activation email
+<<<<<<< HEAD
         if(!$activation){
           $code = $result->activation->getCode();
           $email = $result->user->email;
@@ -79,6 +86,20 @@ class RegistrationController extends Controller
           }
           $message = 'Registration complete.';
       }
+=======
+				if(!$activation){
+					$code = $result->activation->getCode();
+					$email = $result->user->email;
+					Mail::to($email)->queue(new CentaurWelcomeEmail($email, $code, 'Your account has been created!'));
+					$message = 'Registration complete.  Please check your email for activation instructions.';
+				} else {
+					$role = Sentinel::findRoleBySlug('subscriber');
+					if($role){
+						$role->users()->attach($result->user);
+					}
+					$message = 'Registration complete.';
+				}
+>>>>>>> f508a5b5c9b58678fecb8cbee2e327f2d07e0d05
 
         // Ask the user to check their email for the activation link
         $result->setMessage($message);

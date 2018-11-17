@@ -34,12 +34,21 @@
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
                         <li class="{{ Request::is('/dashboard') ? 'active' : '' }}"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+<<<<<<< HEAD
                         @if (Sentinel::check())
                           @if (Sentinel::inRole('administrator'))
                             <li class="{{ Request::is('users*') ? 'active' : '' }}"><a href="{{ route('users.index') }}">Users</a></li>
                             <li class="{{ Request::is('roles*') ? 'active' : '' }}"><a href="{{ route('roles.index') }}">Roles</a></li>
                           @endif
                             <li class="{{ Request::is('posts*') ? 'active' : '' }}"><a href="{{ route('posts.index') }}">Posts</a></li>
+=======
+                        @if(Sentinel::check())
+													@if(Sentinel::inRole('administrator'))
+                            <li class="{{ Request::is('users*') ? 'active' : '' }}"><a href="{{ route('users.index') }}">Users</a></li>
+                            <li class="{{ Request::is('roles*') ? 'active' : '' }}"><a href="{{ route('roles.index') }}">Roles</a></li>
+													@endif
+													<li class="{{ Request::is('posts*') ? 'active' : '' }}"><a href="{{ route('posts.index') }}">Posts</a></li>
+>>>>>>> f508a5b5c9b58678fecb8cbee2e327f2d07e0d05
                         @endif
                     </ul>
                     <ul class="nav navbar-nav navbar-right">

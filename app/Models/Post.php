@@ -8,6 +8,24 @@ use Cviebrock\EloquentSluggable\Sluggable;
 class Post extends Model
 {
     use Sluggable;
+		
+		/**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['title', 'content', 'user_id'];
+		
+		/**
+     * Update post.
+     *
+		 * @param array $data
+     * @return void
+     */
+		public function updatePost($data = array())
+		{
+			$this->update($data);
+		}
 
     /**
      * Return the sluggable configuration array for this model.
@@ -21,5 +39,13 @@ class Post extends Model
                 'source' => 'title'
             ]
         ];
+    }
+		
+		/**
+     * Get the user that owns the post.
+     */
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User');
     }
 }

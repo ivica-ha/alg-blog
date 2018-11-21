@@ -20,12 +20,15 @@ Posts
 		</tr>
 	</thead>
 	<tbody>
-		@foreach($posts as $post)
+		@foreach($posts as $key => $post)
 			<tr>
-				<td></td>
+				<td>{{ $key + 1 }}</td>
 				<td>{{ $post->title }}</td>
-				<td></td>
-				<td></td>
+				<td>{{ $post->user->email }}</td>
+				<td>
+					<a href="{{ route('posts.edit', $post) }}" class="btn btn-primary btn-sm">Edit</a>
+					<a href="{{ route('posts.destroy', $post) }}" class="btn btn-danger btn-sm action_confirm" data-method="delete" data-token="{{ csrf_token() }}">Delete</a>
+				</td>
 			</tr>
 		@endforeach
 	</tbody>

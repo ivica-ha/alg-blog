@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Sentinel;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use App\Http\Requests\UpdatePost;
 
 class PostController extends Controller
 {
@@ -19,7 +20,13 @@ class PostController extends Controller
      */
     public function index()
     {
-			$posts = Post::orderBy('created_at', 'DESC')->paginate(10);	
+			if(Sentinel::inRole('administrator')){
+				$posts = Post::orderBy('created_at', 'DESC')->paginate(10);	
+			} else {
+				$id = Sentinel::getUser()->id;
+				$posts = Post::where('user_id', $id)->orderBy('created_at', 'DESC')->paginate(10);
+			}
+			
       return view('centaur.posts.index')->with('posts', $posts);
     }
 
@@ -55,7 +62,7 @@ class PostController extends Controller
 				
 				session()->flash('success', 'Uspješno ste dodali novi post!');
 				
-				return redirect()->back();
+				return redirect()->route('posts.index');
     }
 
     /**
@@ -77,7 +84,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+      return view('centaur.posts.edit')->with('post', $post);
     }
 
     /**
@@ -87,9 +94,9 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(UpdatePost $request, Post $post)
     {
-        //
+      
     }
 
     /**
@@ -99,7 +106,18 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Post $post)
-    {
-        //
+    {		
+				try{
+					$post->delete();
+				} catch(Exception $e){
+					session()->flash('danger', $e->getMessage());
+				}
+        
+				session()->flash('success', 'Uspješno ste izbrisali <b>' . $post->title .'</b> post!');
+				
+				return redirect()->back();
     }
 }
+
+
+

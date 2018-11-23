@@ -4,18 +4,26 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Post extends Model
 {
-    use Sluggable;
-		
+    use Sluggable, SoftDeletes;
+
+    /**
+    * The attributes that should be mutated to dates.
+    *
+    * @var array
+    */
+    protected $dates = ['deleted_at'];
+
 		/**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = ['title', 'content', 'user_id'];
-		
+
 		/**
      * Update post.
      *
@@ -40,7 +48,7 @@ class Post extends Model
             ]
         ];
     }
-		
+
 		/**
      * Get the user that owns the post.
      */

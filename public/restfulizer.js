@@ -25,6 +25,9 @@ $(function() {
       if ($(this).attr('data-token')) {
         methodForm += "<input type='hidden' name='_token' value='" + $(this).attr('data-token') + "'>\n";
       }
+      if ($(this).attr('data-status')) {
+        methodForm += "<input type='hidden' name='status' value='" + $(this).attr('data-status') + "'>\n";
+      }
       methodForm += "</form>\n";
       return methodForm;
     })

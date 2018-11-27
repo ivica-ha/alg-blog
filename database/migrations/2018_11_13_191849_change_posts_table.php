@@ -29,7 +29,7 @@ class ChangePostsTable extends Migration
     {
         Schema::table('posts', function (Blueprint $table) {
             $table->dropColumn('slug');
-						$table->dropForeign(['user_id']);
+            $table->dropForeign(['user_id']);
         });
     }
 }
